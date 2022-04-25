@@ -1,21 +1,35 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { fetchData } from '../redux/ActionCreators';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { fetchquestions } from '../redux/quiz.redux.slice';
+import { LoadingScreen } from './LoadingScreen';
 
 const IntroScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
+  const { isloading, error } = useSelector((state) => ({
+    isloading: state.isloading,
+    error: state.error,
+  }));
+
   React.useEffect(() => {
-    function fetchDispatch() {
-      dispatch(fetchData()); 
-    }
-    fetchDispatch();
-  }, [dispatch, fetchData]);
+    dispatch(fetchquestions());
+  }, [dispatch, fetchquestions]);
+
+  if (isloading) return <LoadingScreen />;
+  if (error) return <Text>{error}</Text>;
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.basetext}>Welcome to the trivia challenge!</Text>
+      <Text style={styles.basetext}>
+        Welcome to the trivia challenge!
+      </Text>
       <Text style={styles.texts}>
         You will be presented with 10 true or false question
       </Text>
@@ -35,18 +49,13 @@ export default IntroScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //margin: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    //maxWidth:'100%',
   },
   basetext: {
     flex: 3,
     fontSize: 35,
     fontWeight: 'bold',
-    //margin: 10,
-    // alignItems: 'center',
-    // justifyContent: 'center',
     textAlign: 'center',
   },
   texts: {

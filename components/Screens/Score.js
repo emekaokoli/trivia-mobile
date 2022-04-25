@@ -4,6 +4,8 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,37 +26,33 @@ export default function Score({ navigation }) {
   const totalQuestions = questions?.length || 10;
 
   return (
-    // <SafeAreaView>
-    <View style={styles.container}>
-      <Text style={styles.scoreText}>You Scored</Text>
-      <Text style={styles.answersLength}>
-        {correctAnswer} {' / '} {totalQuestions}
-      </Text>
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerText}>You scored</Text>
+          <Text style={styles.headerText}>
+            {correctAnswer} out of {totalQuestions}
+          </Text>
+        </View>
 
-      <View style={styles.TFtexts}>
-        <Text style={styles.TFtexts}>
-          <QuestionList />
-        </Text>
-      </View>
+        <View style={styles.questionsContainer}>
+          <Text style={styles.questiontText}>
+            <QuestionList />
+          </Text>
+        </View>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            navigation.navigate('Home'), dispatch(resetQuiz());
-          }}
-        >
-          <Text style={styles.ButtonText}>Play again?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate.reset()}
-        >
-          <Text style={styles.ButtonText}>Cancel</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-    // </SafeAreaView>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              navigation.navigate('Home'), dispatch(resetQuiz());
+            }}
+          >
+            <Text style={styles.ButtonText}>Play again?</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 Score.propTypes = {
@@ -67,60 +65,67 @@ Score.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: -1,
-    alignSelf: 'center',
-    justifyContent: 'center',
     height: 450,
     width: 400,
+    backgroundColor: '#f2f2f2',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 5,
     marginHorizontal: 5,
-    shadowColor: 'rgba(0,0,0, .4)',
     shadowOffset: { height: 1, width: 1 },
-    shadowOpacity: 1,
-    shadowRadius: 1,
     elevation: 5,
     margin: 20,
+    shadowColor: 'rgba(0,0,0, .4)',
+    shadowOpacity: 1,
+    shadowRadius: 1,
+    flexWrap: 'wrap',
   },
-  TFtexts: {
+  headerContainer: {
     flex: 1,
-    color: '#000',
-    fontSize: 20,
-    alignSelf: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  questionsContainer: {
+    margin: 20,
+    alignSelf: 'center',
+    flexWrap: 'wrap',
+  },
+  questiontText: {
+    fontSize: 20,
+    margin: 25,
   },
   ButtonText: {
-    color: '#fff',
     fontSize: 20,
+    color: '#fff',
+  },
+  buttonContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   button: {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'skyblue',
-    padding: 10,
-    height: 40,
-    width: '40%',
+    width: 150,
+    height: 50,
     margin: 10,
     borderRadius: 5,
+    shadowOffset: { height: 1, width: 1 },
+    elevation: 5,
+    shadowColor: 'rgba(0,0,0, .4)',
+    shadowOpacity: 1,
+    shadowRadius: 1,
   },
-  buttonContainer: {
-    // flex: -3,
-    flexDirection: 'row',
+  scrollView: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 40,
-  },
-  scoreText: {
-    flex: 1,
-    justifyContent: 'center',
-    alignSelf: 'center',
-    color: '#000',
-    fontSize: 22,
-    margin: 30,
-  },
-  answersLength: {
-    flex: 1,
-    justifyContent: 'center',
-    alignSelf: 'center',
-    fontSize: 20,
   },
 });
